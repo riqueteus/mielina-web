@@ -1,10 +1,21 @@
+import { Button, Heading, Stack } from "@chakra-ui/react"
+import { FaGoogle } from "react-icons/fa6"
+
 function App() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-blue-50 p-6">
-      <h1 className="text-4xl font-extrabold text-purple-800 underline">
-       Bem vindo ao Mielina!
-      </h1>
-    </div>
+    <>
+      <Stack direction="column" align="center" justify="center" minH="100vh" gap="20">
+        <Heading as="h1" size="2xl" fontWeight="bold" color="blue.800">
+          Bem vindo ao Mielina!
+        </Heading>
+        <Button background={"purple.800"} size="lg" _hover={{ background: "blue.800" }}>
+          <span style={{ display: "inline-flex", marginRight: "8px" }}>
+            <FaGoogle />
+          </span>
+          Entrar com o Google
+        </Button>
+      </Stack>
+    </>
   )
 }
 
