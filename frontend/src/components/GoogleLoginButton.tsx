@@ -1,13 +1,12 @@
-import { Button } from "@chakra-ui/react"
+import { Button, Text } from "@chakra-ui/react"
 import type { ButtonProps } from "@chakra-ui/react"
 import { FaArrowRight, FaGoogle } from "react-icons/fa6"
 
 interface GoogleLoginButtonProps extends ButtonProps {
-  iconSpacing?: number
   onClick?: () => void
 }
 
-const GoogleLoginButton = ({ iconSpacing = 40, onClick, ...props }: GoogleLoginButtonProps) => {
+const GoogleLoginButton = ({ onClick, ...props }: GoogleLoginButtonProps) => {
   return (
     <Button
       w="full"
@@ -22,7 +21,8 @@ const GoogleLoginButton = ({ iconSpacing = 40, onClick, ...props }: GoogleLoginB
       onClick={onClick}
       _hover={{
         opacity: 0.9,
-        transform: "translateY(-2px)",
+        transform: "translateY(-3px)",
+        color: "gray.800",
       }}
       _active={{
         transform: "translateY(0)",
@@ -34,9 +34,9 @@ const GoogleLoginButton = ({ iconSpacing = 40, onClick, ...props }: GoogleLoginB
       {...props}
     >
       <FaGoogle size={30} />
-      <span style={{ flex: 1, textAlign: "center"}} className="text-5xl">
+      <Text fontSize="lg" fontWeight="bold">              
         Entrar com Google
-      </span>
+      </Text>
       <FaArrowRight size={30} />
     </Button>
   )

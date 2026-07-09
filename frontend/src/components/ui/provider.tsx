@@ -1,8 +1,12 @@
 "use client"
 
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
+import { ChakraProvider, createSystem, defaultConfig } from "@chakra-ui/react"
 import type { PropsWithChildren } from "react"
 
+const system = createSystem(defaultConfig, {
+  preflight: false, 
+})
+
 export function Provider(props: PropsWithChildren) {
-  return <ChakraProvider value={defaultSystem}>{props.children}</ChakraProvider>
+  return <ChakraProvider value={system}>{props.children}</ChakraProvider>
 }

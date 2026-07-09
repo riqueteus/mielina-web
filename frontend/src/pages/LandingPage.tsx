@@ -14,22 +14,22 @@ interface ResourceItem {
 const LandingPage = () => {
     const resources: ResourceItem[] = [
         {
-            icon: <FaCommentDots />,
+            icon: <FaCommentDots size={28} />,
             title: "Tire dúvidas sobre Esclerose Múltipla",
             description: "Respostas claras e confiáveis geradas por IA treinada em fontes médicas.",
-            iconBg: "bg-blue-100",
+            iconBg: "bg-blue-500",
         },
         {
-            icon: <FaChartLine />,
+            icon: <FaChartLine size={28} />,
             title: "Questionário de triagem (CIS)",
             description: "Responda um questionário e descubra se você apresenta indícios de desenvolver Esclerose Múltipla.",
-            iconBg: "bg-purple-100",
+            iconBg: "bg-purple-500",
         },
         {
-            icon: <FaBrain />,
+            icon: <FaBrain size={28} />,
             title: "Análise de Ressonância Magnética",
             description: "Envie suas imagens de ressonância e receba uma análise inteligente com apoio de IA.",
-            iconBg: "bg-blue-100",
+            iconBg: "bg-blue-500",
         },
     ]
 
@@ -46,18 +46,19 @@ const LandingPage = () => {
             </header>
 
 
-            <main className="flex-1 flex items-center justify-center h-4/5">
-                <div className="w-3/4 h-5/6">
+            <div className="py-12 px-8 text-center">
+                <Heading as="h1" size="2xl" className="text-gray-900 leading-tight" fontWeight="bold">
+                    Informação e inteligência para entender e enfrentar a{" "}
+                    <span className="text-purple-600">Esclerose Múltipla</span>.
+                </Heading>
+            </div>
+
+            <main className="flex-1 flex items-center justify-center">
+                <div className="w-3/4 h-screen">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                        {/* Left Column */}
+
                         <div className="flex flex-col justify-center gap-8 lg:gap-10">
-                            {/* Title */}
-                            <div className="space-y-4">
-                                <Heading as="h1" size="2xl" className="text-gray-900 leading-tight" fontWeight="bold">
-                                    Informação e inteligência para entender e enfrentar a{" "}
-                                    <span className="text-purple-600">Esclerose Múltipla</span>.
-                                </Heading>
-                            </div>
+
 
                             <Stack gap="9">
                                 {resources.map((resource, index) => (
@@ -82,7 +83,6 @@ const LandingPage = () => {
                             </div>
                         </div>
 
-                        {/* Right Column - Image */}
                         <div className="hidden lg:flex items-center justify-center">
                             <div className="w-full h-full flex items-center justify-center">
                                 <img

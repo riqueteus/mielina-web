@@ -1,4 +1,8 @@
-@import "tailwindcss";
+@layer theme, base, reset, tokens, recipes, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
 
 :root {
     color-scheme: light;
@@ -24,22 +28,24 @@ body {
     min-height: 100vh;
 }
 
-.bg-gradient-mielina {
-    background:
-        radial-gradient(circle at 8% 8%,
-            rgba(168, 85, 247, .35),
-            transparent 42%),
+@layer utilities {
+    .bg-gradient-mielina {
+        background:
+            radial-gradient(circle at 8% 8%,
+                rgba(168, 85, 247, .35),
+                transparent 42%),
 
-        radial-gradient(circle at 95% 8%,
-            rgba(56, 189, 248, .28),
-            transparent 40%),
+            radial-gradient(circle at 95% 8%,
+                rgba(56, 189, 248, .28),
+                transparent 40%),
 
-        radial-gradient(circle at 50% 100%,
-            rgba(196, 181, 253, .18),
-            transparent 38%),
+            radial-gradient(circle at 50% 100%,
+                rgba(196, 181, 253, .18),
+                transparent 38%),
 
-        linear-gradient(135deg,
-            #f8f2ff 0%,
-            #ffffff 45%,
-            #f1f8ff 100%);
+            linear-gradient(135deg,
+                #f8f2ff 0%,
+                #ffffff 45%,
+                #f1f8ff 100%);
+    }
 }
