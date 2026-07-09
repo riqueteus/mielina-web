@@ -3,6 +3,7 @@ import { FaBrain, FaChartLine, FaCommentDots } from "react-icons/fa6"
 import GoogleLoginButton from "../components/GoogleLoginButton"
 import bainhaHome from "../assets/bainha-home.png"
 import mielinaLogoH from "../assets/mielina-logo.png"
+import { supabase } from "../lib/supabase"
 
 interface ResourceItem {
     icon: React.ReactNode
@@ -32,6 +33,18 @@ const LandingPage = () => {
             iconBg: "bg-blue-500",
         },
     ]
+
+    async function handleGoogleLogin() {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin,
+            },
+        })
+        if (error) {
+            console.error('Erro ao entrar com Google:', error.message)
+        }
+    }
 
     return (
         <div className="min-h-screen w-full bg-gradient-mielina flex flex-col overflow-y-auto">
@@ -79,7 +92,7 @@ const LandingPage = () => {
                             </Stack>
 
                             <div className="pt-2">
-                                <GoogleLoginButton />
+                                <GoogleLoginButton onClick={handleGoogleLogin} />
                             </div>
                         </div>
 
