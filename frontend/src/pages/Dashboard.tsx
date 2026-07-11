@@ -4,7 +4,7 @@ import mielinaLogoH from "../assets/mielina-logo.png"
 import { Text } from "@chakra-ui/react"
 
 
-function LoogedPage() {
+function Dashboard() {
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -38,4 +38,4 @@ function LoogedPage() {
   )
 }
 
-export default LoogedPage
+export default Dashboard

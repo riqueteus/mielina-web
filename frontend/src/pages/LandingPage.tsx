@@ -4,6 +4,8 @@ import GoogleLoginButton from "../components/GoogleLoginButton"
 import bainhaHome from "../assets/bainha-home.png"
 import mielinaLogoH from "../assets/mielina-logo.png"
 import { supabase } from "../lib/supabase"
+import { Navigate } from "react-router-dom"
+import { useAuth } from "@/hooks/useAuth"
 
 interface ResourceItem {
     icon: React.ReactNode
@@ -13,6 +15,10 @@ interface ResourceItem {
 }
 
 const LandingPage = () => {
+
+    const { session } = useAuth()
+    if (session) return <Navigate to="/dashboard" replace />
+
     const resources: ResourceItem[] = [
         {
             icon: <FaCommentDots size={28} />,
@@ -38,7 +44,7 @@ const LandingPage = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin,
+                redirectTo: `${window.location.origin}/dashboard`,
             },
         })
         if (error) {

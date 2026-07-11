@@ -1,20 +1,25 @@
-import { useAuth } from "./hooks/useAuth"
-import LoggedPage from "./pages/LoggedPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import LandingPage from "./pages/LandingPage"
-import { Spinner } from "@chakra-ui/react"
+import Dashboard from "./pages/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
-  const { session, loading } = useAuth()
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">   
-      <Spinner color="purple.500" size="lg" />
-      </div>
-    )
-  }
-
-  return session ? <LoggedPage /> : <LandingPage />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
