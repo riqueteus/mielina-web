@@ -31,7 +31,7 @@ function Sidebar({ onNavigate }: SidebarProps) {
       direction="column"
       w="64"
       shadow-2xl
-      bg="blue.800"
+      bg="cyan.600"
       h="100vh"
       position="sticky"
       top="0"
