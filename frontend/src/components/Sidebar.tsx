@@ -15,7 +15,11 @@ const menuItems: MenuItem[] = [
   { path: "/duvidas", label: "Dúvidas", icon: FaComment },
 ]
 
-function Sidebar() {
+interface SidebarProps {
+  onNavigate?: () => void 
+}
+
+function Sidebar({ onNavigate }: SidebarProps) {
   const location = useLocation()
 
   async function handleLogout() {
@@ -55,7 +59,7 @@ function Sidebar() {
               _hover={{ bg: "purple.50", color: "purple.700" }}
               transition="all 0.15s"
             >
-              <RouterLink to={item.path}>
+              <RouterLink to={item.path} onClick={onNavigate}>
                 <Icon as={item.icon} boxSize="5" />
                 <Text fontSize="md">{item.label}</Text>
               </RouterLink>
