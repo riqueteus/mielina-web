@@ -1,6 +1,6 @@
 import { Box, VStack, Flex, Text, Icon, Button } from "@chakra-ui/react"
 import { Link as RouterLink, useLocation } from "react-router-dom"
-import { FaHouse, FaComment, FaRightFromBracket } from "react-icons/fa6"
+import { FaHouse, FaComment, FaRightFromBracket, FaChartLine, FaBrain, FaFileLines } from "react-icons/fa6"
 import { supabase } from "../lib/supabase"
 import mielinaLogoH from "../assets/mielina-logo.png"
 
@@ -13,6 +13,9 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { path: "/dashboard", label: "Início", icon: FaHouse },
   { path: "/duvidas", label: "Dúvidas", icon: FaComment },
+  { path: "/triagem", label: "Triagem", icon: FaChartLine },
+  { path: "/ressonancia", label: "Ressonância", icon: FaBrain },
+  { path: "/resultados", label: "Resultados", icon: FaFileLines }
 ]
 
 interface SidebarProps {
