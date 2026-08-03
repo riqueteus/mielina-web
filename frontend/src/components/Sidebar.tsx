@@ -34,7 +34,7 @@ function Sidebar({ onNavigate }: SidebarProps) {
       direction="column"
       w="64"
       shadow-2xl
-      bg="cyan.600"
+      bg="gray.100"
       h="100vh"
       position="sticky"
       top="0"
@@ -56,10 +56,10 @@ function Sidebar({ onNavigate }: SidebarProps) {
               px="3"
               py="2"
               borderRadius="lg"
-              bg={isActive ? "purple.50" : "transparent"}
-              color={isActive ? "purple.700" : "gray.100"}
+              bg={isActive ? "teal.300" : "blue.800"}
+              color={isActive ? "blue.700" : "gray.100"}
               fontWeight={isActive ? "600" : "400"}
-              _hover={{ bg: "purple.50", color: "purple.700" }}
+              _hover={{ bg: "blue.300", color: "blue.700" }}
               transition="all 0.15s"
             >
               <RouterLink to={item.path} onClick={onNavigate}>
@@ -75,9 +75,9 @@ function Sidebar({ onNavigate }: SidebarProps) {
         <Button
           onClick={handleLogout}
           w="full"
-          bg="purple.700"
+          bg="blue.800"
           color="white"
-          _hover={{ bg: "blue.500" }}
+          _hover={{ bg: "purple.600" }}
           size="lg"
           borderRadius="lg"
         >
