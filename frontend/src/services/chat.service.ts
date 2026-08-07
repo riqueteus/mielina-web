@@ -11,6 +11,9 @@ import {
   TENTATIVAS_PERGUNTA,
   TENTATIVAS_PING,
 } from '../config/chat.config';
+import type { PingResposta } from './ping.service';
+
+const SERVICO_CHAT = 'rag';
 
 export function verificarStatusIA(
   setStatusRag: (status: StatusRag) => void
@@ -18,38 +21,35 @@ export function verificarStatusIA(
   let cancelado = false;
   let tentativa = 0;
 
+  const falhou = () => {
+    if (cancelado) return;
+    if (tentativa >= TENTATIVAS_PING) {
+      setStatusRag('indisponivel');
+      return;
+    }
+    setStatusRag('acordando');
+    setTimeout(() => {
+      if (!cancelado) aquecerRag();
+    }, DELAY_RETRY_PING);
+  };
+
   const aquecerRag = async () => {
     tentativa++;
     try {
-      const res = await fetch(`${API_URL}/api/ping-rag`, { method: 'GET' });
+      const res = await fetch(`${API_URL}/api/ping`, { method: 'GET' });
       if (cancelado) return;
-      const dados = await res.json().catch(() => ({ acordado: false }));
+      const dados = (await res.json().catch(() => null)) as PingResposta | null;
       if (cancelado) return;
 
-      if (dados.acordado) {
+      const servico = dados?.servicos?.find((s) => s.nome === SERVICO_CHAT);
+      if (servico?.acordado) {
         setStatusRag('pronto');
         return;
       }
 
-      if (tentativa >= TENTATIVAS_PING) {
-        setStatusRag('indisponivel');
-        return;
-      }
-
-      setStatusRag('acordando');
-      setTimeout(() => {
-        if (!cancelado) aquecerRag();
-      }, DELAY_RETRY_PING);
+      falhou();
     } catch {
-      if (cancelado) return;
-      if (tentativa >= TENTATIVAS_PING) {
-        setStatusRag('indisponivel');
-        return;
-      }
-      setStatusRag('acordando');
-      setTimeout(() => {
-        if (!cancelado) aquecerRag();
-      }, DELAY_RETRY_PING);
+      falhou();
     }
   };
 
