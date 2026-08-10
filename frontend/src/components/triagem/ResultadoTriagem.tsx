@@ -10,61 +10,32 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { FaHeartPulse, FaRotateLeft } from "react-icons/fa6"
-import type { NivelRisco, ResultadoPrevisao } from "../../types/classification.types"
+import { FaArrowRight, FaHeartPulse } from "react-icons/fa6"
+import { formatarDataHora } from "../../lib/date.util"
+import { VISUAL_RISCO } from "../resultados/visual-risco"
+import type { ResultadoTriagemHistorico } from "../../types/resultados.types"
 
 interface ResultadoTriagemProps {
-  resultado: ResultadoPrevisao
-  onRefazer: () => void
+  resultado: ResultadoTriagemHistorico
+  onNovaTriagem: () => void
 }
 
-interface VisualRisco {
-  paleta: "green" | "orange" | "red"
-  corFundo: string
-  corTexto: string
-  rotulo: string
-  descricao: string
-}
-
-const VISUAL_RISCO: Record<NivelRisco, VisualRisco> = {
-  baixo: {
-    paleta: "green",
-    corFundo: "green.100",
-    corTexto: "green.800",
-    rotulo: "Risco baixo",
-    descricao:
-      "Com base nos dados informados, a possibilidade estimada de evolução para Esclerose Múltipla é baixa. Mantenha o acompanhamento de rotina.",
-  },
-  moderado: {
-    paleta: "orange",
-    corFundo: "orange.100",
-    corTexto: "orange.800",
-    rotulo: "Risco moderado",
-    descricao:
-      "Há uma possibilidade considerável. É importante conversar com um médico ou neurologista para uma avaliação adequada.",
-  },
-  alto: {
-    paleta: "red",
-    corFundo: "red.100",
-    corTexto: "red.800",
-    rotulo: "Risco alto",
-    descricao:
-      "A possibilidade estimada é alta. Procure um profissional de saúde o quanto antes para avaliação e orientação.",
-  },
-}
-
-function ResultadoTriagem({ resultado, onRefazer }: ResultadoTriagemProps) {
-  const percentual = resultado.percentualRisco ?? 0
-  const nivel = resultado.nivel ?? "baixo"
-  const visual = VISUAL_RISCO[nivel]
+function ResultadoTriagem({ resultado, onNovaTriagem }: ResultadoTriagemProps) {
+  const percentual = resultado.percentualRisco
+  const visual = VISUAL_RISCO[resultado.nivel]
 
   return (
     <VStack gap="5" align="stretch" w="100%">
       <HStack gap="3">
         <Icon as={FaHeartPulse} boxSize="8" color="purple.700" />
-        <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
-          Resultado da triagem
-        </Text>
+        <Box>
+          <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
+            Resultado da triagem
+          </Text>
+          <Text fontSize="sm" color="gray.500">
+            Realizada em {formatarDataHora(resultado.criadoEm)}
+          </Text>
+        </Box>
       </HStack>
 
       <Box
@@ -110,8 +81,8 @@ function ResultadoTriagem({ resultado, onRefazer }: ResultadoTriagemProps) {
 
         <Flex justify="center" mt="5">
           <Box
-            bg={visual.corFundo}
-            color={visual.corTexto}
+            bg={visual.corBadge}
+            color={visual.corBadgeTexto}
             fontWeight="bold"
             fontSize="sm"
             px="4"
@@ -139,8 +110,10 @@ function ResultadoTriagem({ resultado, onRefazer }: ResultadoTriagemProps) {
           <Alert.Title fontSize="sm">Importante</Alert.Title>
           <Alert.Description fontSize="sm">
             Este resultado é uma estimativa gerada por inteligência artificial e{" "}
-            <strong>não substitui a orientação, o diagnóstico ou o tratamento
-            médico</strong>. Consulte sempre um profissional de saúde.
+            <strong>
+              não substitui a orientação, o diagnóstico ou o tratamento médico
+            </strong>
+            . Consulte sempre um profissional de saúde.
           </Alert.Description>
         </Alert.Content>
       </Alert.Root>
@@ -150,10 +123,10 @@ function ResultadoTriagem({ resultado, onRefazer }: ResultadoTriagemProps) {
         size="lg"
         rounded="xl"
         w="full"
-        onClick={onRefazer}
+        onClick={onNovaTriagem}
       >
-        <Icon as={FaRotateLeft} />
-        Refazer triagem
+        Nova triagem
+        <Icon as={FaArrowRight} />
       </Button>
     </VStack>
   )
