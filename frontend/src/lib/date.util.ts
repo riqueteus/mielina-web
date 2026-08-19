@@ -14,3 +14,7 @@ export function formatarDataHora(iso: string): string {
   if (Number.isNaN(data.getTime())) return "";
   return `${formatadorData.format(data)} às ${formatadorHora.format(data)}`;
 }
+
+export function formatarDataSimples(iso: string | null): string {
+  return iso ? iso.split("-").reverse().join("/") : "Data não identificada";
+}
