@@ -1,5 +1,6 @@
 import { pingRAG } from './rag.service';
 import { pingClassification } from './classification.service';
+import { pingLaudo } from './laudo';
 import type { PingServico } from '../types/ping';
 
 type PingFn = () => Promise<Omit<PingServico, 'nome'>>;
@@ -7,6 +8,7 @@ type PingFn = () => Promise<Omit<PingServico, 'nome'>>;
 const SERVICOS_REGISTRADOS: { nome: string; ping: PingFn }[] = [
   { nome: 'rag', ping: pingRAG },
   { nome: 'classification', ping: pingClassification },
+  { nome: 'laudo', ping: pingLaudo },
 ];
 
 export async function pingTodosServicos(): Promise<{

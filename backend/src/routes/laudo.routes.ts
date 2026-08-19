@@ -4,6 +4,7 @@ import { autenticar } from '../middlewares/auth.middleware';
 import {
   distribuicaoRegioes,
   evolucaoLesoes,
+  excluir,
   listar,
   uploadLaudo,
 } from '../controllers/laudo.controller';
@@ -34,6 +35,7 @@ function uploadUnico(campo: string) {
 
 router.post('/laudos', autenticar, uploadUnico('arquivo'), uploadLaudo);
 router.get('/laudos', autenticar, listar);
+router.delete('/laudos/:id', autenticar, excluir);
 router.get('/laudos/grafico/evolucao-lesoes', autenticar, evolucaoLesoes);
 router.get('/laudos/grafico/distribuicao-regioes', autenticar, distribuicaoRegioes);
 

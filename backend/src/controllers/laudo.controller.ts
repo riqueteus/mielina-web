@@ -2,12 +2,15 @@ import { Request, Response } from 'express';
 import { RequisicaoAutenticada } from '../middlewares/auth.middleware';
 import {
   ErroLaudo,
+  calcularHashPdf,
+  excluirLaudo,
   extrairLaudo,
   graficoDistribuicaoRegioes,
   graficoEvolucaoLesoes,
   listarLaudos,
   salvarLaudoCompleto,
-} from '../services/laudo.service';
+  verificarLaudoDuplicado,
+} from '../services/laudo';
 
 function tratarErro(err: unknown, res: Response) {
   if (err instanceof ErroLaudo) {
@@ -40,6 +43,9 @@ export async function uploadLaudo(req: Request, res: Response) {
 
     console.log(`[laudos] Processando laudo "${nomeOriginal}" para o usuário ${usuario_id}`);
 
+    const hashPdf = calcularHashPdf(arquivo.buffer);
+    await verificarLaudoDuplicado(supabase, usuario_id, hashPdf);
+
     const resultado = await extrairLaudo(arquivo.buffer, nomeOriginal);
 
     const laudo = await salvarLaudoCompleto({
@@ -48,6 +54,7 @@ export async function uploadLaudo(req: Request, res: Response) {
       arquivo: arquivo.buffer,
       nomeArquivo: nomeOriginal,
       resultado,
+      hash: hashPdf,
     });
 
     console.log(`[laudos] Laudo salvo com sucesso (id=${laudo.id}, ${laudo.quantidade_lesoes} lesões)`);
@@ -64,6 +71,24 @@ export async function listar(req: Request, res: Response) {
   try {
     const laudos = await listarLaudos(supabase, usuario_id);
     return res.json(laudos);
+  } catch (err) {
+    return tratarErro(err, res);
+  }
+}
+
+export async function excluir(req: Request, res: Response) {
+  const { supabase, usuario_id } = req as RequisicaoAutenticada;
+
+  try {
+    const { id } = req.params as { id?: string };
+
+    if (!id) {
+      return res.status(400).json({ erro: 'Id do laudo ausente.' });
+    }
+
+    await excluirLaudo(supabase, usuario_id, id);
+    console.log(`[laudos] Laudo excluído (id=${id}, usuário ${usuario_id})`);
+    return res.status(204).send();
   } catch (err) {
     return tratarErro(err, res);
   }
