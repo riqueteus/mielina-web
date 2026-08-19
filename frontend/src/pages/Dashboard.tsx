@@ -1,6 +1,6 @@
 import { Alert, Avatar, Box, Flex, Heading, Text, Stack, SimpleGrid, Icon } from "@chakra-ui/react"
 import { Link as RouterLink } from "react-router-dom"
-import { FaCommentDots, FaChartLine, FaBrain, FaFileLines, FaArrowRight } from "react-icons/fa6"
+import { FaCommentDots, FaChartLine, FaFileMedical, FaFileLines, FaArrowRight } from "react-icons/fa6"
 import { useAuth } from "../hooks/useAuth"
 
 interface ResourceCard {
@@ -30,12 +30,12 @@ const resources: ResourceCard[] = [
     path: "/triagem",
   },
   {
-    icon: FaBrain,
+    icon: FaFileMedical,
     backgroundColor: "teal.300",
-    title: "Ressonância",
-    description: "Envie suas imagens e receba uma análise inteligente.",
-    linkLabel: "Enviar imagem",
-    path: "/ressonancia",
+    title: "Meus Laudos",
+    description: "Envie seus laudos de ressonância em PDF e acompanhe a evolução das lesões.",
+    linkLabel: "Enviar laudo",
+    path: "/laudos",
   },
   {
     icon: FaFileLines,

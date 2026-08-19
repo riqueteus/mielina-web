@@ -5,8 +5,8 @@ import Duvidas from "./pages/Duvidas"
 import AppLayout from "./layouts/AppLayout"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Triagem from "./pages/Triagem"
-import Ressonancia from "./pages/Ressonancia"
 import Resultados from "./pages/Resultados"
+import Laudos from "./pages/Laudos"
 
 function App() {
   return (
@@ -24,8 +24,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/duvidas" element={<Duvidas />} />
           <Route path="/triagem" element={<Triagem />} />
-          <Route path="/ressonancia" element={<Ressonancia />} />
           <Route path="/resultados" element={<Resultados />} />
+          <Route path="/laudos" element={<Laudos />} />
         </Route>
       </Routes>
     </BrowserRouter>

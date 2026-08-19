@@ -1,5 +1,5 @@
 import { Heading, Stack, Text } from "@chakra-ui/react"
-import { FaBrain, FaChartLine, FaCommentDots } from "react-icons/fa6"
+import { FaChartLine, FaCommentDots, FaFileMedical } from "react-icons/fa6"
 import GoogleLoginButton from "../components/GoogleLoginButton"
 import bainhaHome from "../assets/bainha-home.png"
 import mielinaLogoH from "../assets/mielina-logo.png"
@@ -24,19 +24,19 @@ const LandingPage = () => {
             icon: <FaCommentDots size={28} />,
             title: "Tire dúvidas sobre Esclerose Múltipla",
             description: "Respostas claras e confiáveis geradas por IA treinada em fontes médicas.",
-            iconBg: "bg-blue-500",
+            iconBg: "bg-blue-400",
         },
         {
             icon: <FaChartLine size={28} />,
             title: "Questionário de triagem (CIS)",
             description: "Responda um questionário e descubra se você apresenta indícios de desenvolver Esclerose Múltipla.",
-            iconBg: "bg-purple-500",
+            iconBg: "bg-purple-400",
         },
         {
-            icon: <FaBrain size={28} />,
-            title: "Análise de Ressonância Magnética",
-            description: "Envie suas imagens de ressonância e receba uma análise inteligente com apoio de IA.",
-            iconBg: "bg-blue-500",
+            icon: <FaFileMedical size={28} />,
+            title: "Acompanhamento de laudos de ressonância",
+            description: "Envie seus laudos de ressonância em PDF e acompanhe a evolução das lesões com apoio de IA.",
+            iconBg: "bg-teal-400",
         },
     ]
 
