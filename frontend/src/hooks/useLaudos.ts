@@ -24,20 +24,36 @@ export function useLaudos() {
   useEffect(() => {
     let ativo = true
 
-    Promise.all([listarLaudos(), obterEvolucaoLesoes(), obterDistribuicaoRegioes()])
-      .then(([lista, evolucaoDados, distribuicaoDados]) => {
+    async function carregar() {
+      try {
+        const lista = await listarLaudos()
         if (!ativo) return
         setLaudos(lista)
-        setEvolucao(evolucaoDados)
-        setDistribuicao(distribuicaoDados)
-      })
-      .catch((err) => {
+
+        if (lista.length === 0) {
+          setEvolucao([])
+          setDistribuicao([])
+          setErro(null)
+          return
+        }
+
+        const [evolucaoDados, distribuicaoDados] = await Promise.allSettled([
+          obterEvolucaoLesoes(),
+          obterDistribuicaoRegioes(),
+        ])
+        if (!ativo) return
+
+        setEvolucao(evolucaoDados.status === "fulfilled" ? evolucaoDados.value : [])
+        setDistribuicao(distribuicaoDados.status === "fulfilled" ? distribuicaoDados.value : [])
+      } catch (err) {
         if (!ativo) return
         setErro(err instanceof Error ? err.message : "Falha ao carregar os laudos.")
-      })
-      .finally(() => {
+      } finally {
         if (ativo) setCarregando(false)
-      })
+      }
+    }
+
+    carregar()
 
     return () => {
       ativo = false
