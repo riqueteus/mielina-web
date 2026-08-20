@@ -37,14 +37,15 @@ function Sidebar({ onNavigate }: SidebarProps) {
       h="100vh"
       position="sticky"
       top="0"
-      gap="10"
+      gap="4"
+      overflowY="auto"
       borderRight="1px solid #e2e8f0"
     >
-      <Flex align="center" p="10" justify="center">
-        <img src={mielinaLogoH} alt="Mielina" className="w-60" />
+      <Flex align="center" p="6" justify="center">
+        <img src={mielinaLogoH} alt="Mielina" className="w-44" />
       </Flex>
 
-      <VStack align="stretch" gap="3" px="4">
+      <VStack align="stretch" gap="2" px="4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
@@ -75,7 +76,7 @@ function Sidebar({ onNavigate }: SidebarProps) {
         })}
       </VStack>
 
-      <Box mt="auto" p="8">
+      <Box mt="auto" p="4">
         <Button
           onClick={handleLogout}
           w="full"
