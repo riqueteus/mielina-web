@@ -18,8 +18,8 @@ function AvisoTriagem({ onContinuar }: AvisoTriagemProps) {
   return (
     <VStack gap="5" align="stretch" w="100%">
       <HStack gap="3">
-        <Icon as={FaHeartPulse} boxSize="8" color="purple.700" />
-        <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
+        <Icon as={FaHeartPulse} boxSize="8" color="#7c3aed" />
+        <Text fontSize={{ base: "2xl", md: "3xl" }} color="#7c3aed" fontWeight="bold">
           Triagem (CIS)
         </Text>
       </HStack>

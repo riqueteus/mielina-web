@@ -112,11 +112,11 @@ function QuestionarioTriagem({
   return (
     <VStack gap="5" align="stretch" w="100%">
       <HStack gap="3">
-        <Icon as={FaHeartPulse} boxSize="8" color="purple.700" />
-        <Box>
-          <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
-            Triagem (CIS)
-          </Text>
+<Icon as={FaHeartPulse} boxSize="8" color="#7c3aed" />
+          <Box>
+            <Text fontSize={{ base: "2xl", md: "3xl" }} color="#7c3aed" fontWeight="bold">
+              Triagem (CIS)
+            </Text>
           <Text color="gray.600">
             Etapa {etapaAtual + 1} de {ETAPAS_TRIAGEM.length} — {etapa.titulo}
           </Text>

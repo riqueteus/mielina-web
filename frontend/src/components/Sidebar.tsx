@@ -33,18 +33,18 @@ function Sidebar({ onNavigate }: SidebarProps) {
     <Flex
       direction="column"
       w="64"
-      shadow-2xl
-      bg="gray.100"
+      className="bg-neurons"
       h="100vh"
       position="sticky"
       top="0"
       gap="10"
+      borderRight="1px solid #e2e8f0"
     >
       <Flex align="center" p="10" justify="center">
         <img src={mielinaLogoH} alt="Mielina" className="w-60" />
       </Flex>
 
-      <VStack align="stretch" gap="5" px="3">
+      <VStack align="stretch" gap="3" px="4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
@@ -54,12 +54,16 @@ function Sidebar({ onNavigate }: SidebarProps) {
               align="center"
               gap="3"
               px="3"
-              py="2"
+              py="2.5"
               borderRadius="lg"
-              bg={isActive ? "teal.300" : "blue.800"}
-              color={isActive ? "blue.700" : "gray.100"}
-              fontWeight={isActive ? "600" : "400"}
-              _hover={{ bg: "blue.300", color: "blue.700" }}
+              bg={isActive ? "white" : "transparent"}
+              color={isActive ? "#7c3aed" : "#334155"}
+              fontWeight={isActive ? "700" : "500"}
+              boxShadow={isActive ? "0 1px 3px rgba(15,23,42,0.12)" : "none"}
+              _hover={{
+                bg: isActive ? "white" : "rgba(255,255,255,0.7)",
+                color: "#7c3aed",
+              }}
               transition="all 0.15s"
             >
               <RouterLink to={item.path} onClick={onNavigate}>
@@ -71,13 +75,13 @@ function Sidebar({ onNavigate }: SidebarProps) {
         })}
       </VStack>
 
-      <Box mt="auto" p="12">
+      <Box mt="auto" p="8">
         <Button
           onClick={handleLogout}
           w="full"
-          bg="blue.800"
+          bg="#7c3aed"
           color="white"
-          _hover={{ bg: "purple.600" }}
+          _hover={{ bg: "#6d28d9", transform: "translateY(-1px)" }}
           size="lg"
           borderRadius="lg"
         >

@@ -12,10 +12,10 @@ function Duvidas() {
       <VStack gap="6" align="stretch" maxW="5xl" mx="auto">
         <Box>
           <HStack gap="3" mb="2">
-            <Icon as={FiMessageCircle} boxSize="8" color="purple.700" />
+            <Icon as={FiMessageCircle} boxSize="8" color="#2563eb" />
             <Text
               fontSize={{ base: "2xl", md: "3xl" }}
-              color="purple.700"
+              color="#2563eb"
               fontWeight="bold"
             >
               Tire suas dúvidas!

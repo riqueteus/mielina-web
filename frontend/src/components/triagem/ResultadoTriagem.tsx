@@ -27,9 +27,9 @@ function ResultadoTriagem({ resultado, onNovaTriagem }: ResultadoTriagemProps) {
   return (
     <VStack gap="5" align="stretch" w="100%">
       <HStack gap="3">
-        <Icon as={FaHeartPulse} boxSize="8" color="purple.700" />
+        <Icon as={FaHeartPulse} boxSize="8" color="#b45309" />
         <Box>
-          <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
+          <Text fontSize={{ base: "2xl", md: "3xl" }} color="#b45309" fontWeight="bold">
             Resultado da triagem
           </Text>
           <Text fontSize="sm" color="gray.500">
@@ -44,7 +44,7 @@ function ResultadoTriagem({ resultado, onNovaTriagem }: ResultadoTriagemProps) {
         rounded="2xl"
         shadow="lg"
         border="1px solid"
-        borderColor="purple.100"
+        borderColor="rgba(180, 83, 9, 0.20)"
         textAlign="center"
       >
         <Text fontSize="lg" fontWeight="600" color="gray.800">
@@ -119,7 +119,7 @@ function ResultadoTriagem({ resultado, onNovaTriagem }: ResultadoTriagemProps) {
       </Alert.Root>
 
       <Button
-        colorScheme="purple"
+        colorScheme="orange"
         size="lg"
         rounded="xl"
         w="full"

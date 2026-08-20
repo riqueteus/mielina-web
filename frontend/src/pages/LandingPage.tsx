@@ -53,7 +53,7 @@ const LandingPage = () => {
     }
 
     return (
-        <div className="min-h-screen w-full bg-gradient-mielina flex flex-col overflow-y-auto">
+        <div className="min-h-screen w-full bg-neurons-landing flex flex-col overflow-y-auto">
             <header className="flex items-center justify-center shadow-sm h-32">
                 <div className="w-3/4 h-24 flex items-center justify-center ">
                     <img

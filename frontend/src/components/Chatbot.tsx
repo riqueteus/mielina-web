@@ -133,10 +133,10 @@ export default function Chatbot({ userId }: { userId: string }) {
           fontStyle="italic"
           px="3"
           py="2"
-          bg="teal.600"
+          bg="#2563eb"
           rounded="md"
           borderLeft="2px solid"
-          borderColor="teal.600"
+          borderColor="#2563eb"
         >
           Este chatbot tem caráter informativo e não substitui a orientação, o
           diagnóstico ou o tratamento realizado por um profissional de saúde.

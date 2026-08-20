@@ -5,9 +5,9 @@ function CabecalhoLaudos() {
   return (
     <>
       <HStack gap="3">
-        <Icon as={FaFileMedical} boxSize="7" color="purple.700" />
+        <Icon as={FaFileMedical} boxSize="7" color="#0d9488" />
         <Box>
-          <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
+          <Text fontSize={{ base: "2xl", md: "3xl" }} color="#0d9488" fontWeight="bold">
             Meus Laudos
           </Text>
           <Text color="gray.500">

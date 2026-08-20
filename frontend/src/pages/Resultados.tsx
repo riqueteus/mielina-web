@@ -26,9 +26,9 @@ function Resultados() {
     <Box p={{ base: "4", md: "8" }} minH="100vh">
       <VStack gap="6" align="stretch" maxW="4xl" mx="auto">
         <HStack gap="3">
-          <Icon as={FaFileLines} boxSize="7" color="purple.700" />
+          <Icon as={FaFileLines} boxSize="7" color="#b45309" />
           <Box>
-            <Text fontSize={{ base: "2xl", md: "3xl" }} color="purple.700" fontWeight="bold">
+            <Text fontSize={{ base: "2xl", md: "3xl" }} color="#b45309" fontWeight="bold">
               Resultados
             </Text>
             <Text color="gray.500">
@@ -69,7 +69,7 @@ function Resultados() {
           <>
             <VStack gap="4" align="stretch">
               <Box>
-                <Text fontSize="sm" fontWeight="600" color="purple.700">
+                <Text fontSize="sm" fontWeight="600" color="#b45309">
                   Último resultado
                 </Text>
                 <Text fontSize="xs" color="gray.500">
@@ -85,12 +85,12 @@ function Resultados() {
             {anteriores.length > 0 && (
               <VStack gap="4" align="stretch" mt="2">
                 <HStack gap="2">
-                  <Text fontSize="sm" fontWeight="600" color="purple.700">
+                  <Text fontSize="sm" fontWeight="600" color="#b45309">
                     Histórico
                   </Text>
                   <Box
-                    bg="purple.50"
-                    color="purple.700"
+                    bg="rgba(180, 83, 9, 0.12)"
+                    color="#b45309"
                     fontSize="xs"
                     fontWeight="600"
                     px="2"
