@@ -1,15 +1,20 @@
 import { FRONTEND_URL } from '../env';
 
+function normalizarOrigem(url: string): string {
+  return url.replace(/\/$/, '').toLowerCase();
+}
+
 export function validarOrigem(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
   if (!origin) return callback(null, true);
 
-  const ehLocalhost = /^https?:\/\/localhost(:\d+)?(\/|$)/.test(origin);
-  const eh127 = /^https?:\/\/127\.0\.0\.1(:\d+)?(\/|$)/.test(origin);
-  const correspondeFrontendUrl = FRONTEND_URL && origin.startsWith(FRONTEND_URL.replace(/\/$/, ''));
-  const ehVercel = /https?:\/\/[\w-]+\.vercel\.app$/.test(origin);
-  const ehRender = /https?:\/\/[\w-]+\.onrender\.com$/.test(origin);
+  const ehLocalhost = /^https?:\/\/localhost(:\d+)?(\/|$)/i.test(origin);
+  const eh127 = /^https?:\/\/127\.0\.0\.1(:\d+)?(\/|$)/i.test(origin);
 
-  if (ehLocalhost || eh127 || correspondeFrontendUrl || ehVercel || ehRender) {
+  const origemNormalizada = normalizarOrigem(origin);
+  const frontendPermitido = FRONTEND_URL ? normalizarOrigem(FRONTEND_URL) : null;
+  const correspondeFrontendUrl = !!frontendPermitido && origemNormalizada === frontendPermitido;
+
+  if (ehLocalhost || eh127 || correspondeFrontendUrl) {
     return callback(null, true);
   }
 
