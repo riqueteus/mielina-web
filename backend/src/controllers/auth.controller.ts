@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { renovarSessao, revogarSessao } from '../services/auth.service';
-import { NODE_ENV } from '../env';
+import { COOKIE_SECURE, COOKIE_SAME_SITE } from '../env';
 
 const NOME_COOKIE = 'mielina_rt';
 
 const opcoesCookie = {
   httpOnly: true,
-  secure: NODE_ENV === 'production',
-  sameSite: NODE_ENV === 'production' ? ('none' as const) : ('lax' as const),
+  secure: COOKIE_SECURE,
+  sameSite: COOKIE_SAME_SITE,
   path: '/api/auth',
   maxAge: 30 * 24 * 60 * 60 * 1000,
 };
