@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -34,6 +35,7 @@ if (!SUPABASE_ANON_KEY) {
 
 export {
   PORT,
+  NODE_ENV,
   RAG_SERVICE_URL,
   FRONTEND_URL,
   CLASSIFICATION_SERVICE_URL,
