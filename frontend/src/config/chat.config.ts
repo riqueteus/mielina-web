@@ -12,9 +12,9 @@ export const MENSAGEM_BOAS_VINDAS: Mensagem = {
 };
 
 export const DELAY_RETRY_PERGUNTA = 5000;
-export const DELAY_RETRY_PING = 8000;
+export const DELAY_RETRY_PING = 15_000;
 export const TENTATIVAS_PERGUNTA = 2;
-export const TENTATIVAS_PING = 5;
+export const TENTATIVAS_PING = 4;
 
 export function chaveStoragePorUsuario(userId: string): string {
   return `${STORAGE_KEY}:${userId}`;

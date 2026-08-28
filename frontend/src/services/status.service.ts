@@ -28,7 +28,7 @@ export function verificarStatusServico(
   const aquecerServico = async () => {
     tentativa++;
     try {
-      const res = await fetch(`${API_URL}/api/ping`, { method: 'GET' });
+      const res = await fetch(`${API_URL}/api/ping?servico=${encodeURIComponent(nomeServico)}`, { method: 'GET' });
       if (cancelado) return;
       const dados = (await res.json().catch(() => null)) as PingResposta | null;
       if (cancelado) return;
