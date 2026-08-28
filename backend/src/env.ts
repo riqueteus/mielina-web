@@ -12,6 +12,8 @@ const LAUDO_SERVICE_URL = process.env.LAUDO_SERVICE_URL;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
+const REDIS_URL = process.env.REDIS_URL || undefined;
+
 const COOKIE_SECURE_BRUTO = process.env.COOKIE_SECURE ?? 'false';
 const COOKIE_SECURE = ['1', 'true', 'TRUE', 'yes', 'sim'].includes(COOKIE_SECURE_BRUTO);
 
@@ -50,4 +52,5 @@ export {
   SUPABASE_ANON_KEY,
   COOKIE_SECURE,
   COOKIE_SAME_SITE,
+  REDIS_URL,
 };

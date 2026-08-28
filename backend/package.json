@@ -5,7 +5,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "multer": "^2.2.0"
+    "ioredis": "^6.0.0",
+    "multer": "^2.2.0",
+    "rate-limiter-flexible": "^11.2.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
