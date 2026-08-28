@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import multer from 'multer';
 import { autenticar } from '../middlewares/auth.middleware';
+import { rateLimitLaudosCriar } from '../middlewares/rate-limit.middleware';
 import {
   distribuicaoRegioes,
   evolucaoLesoes,
@@ -33,7 +34,7 @@ function uploadUnico(campo: string) {
   };
 }
 
-router.post('/laudos', autenticar, uploadUnico('arquivo'), uploadLaudo);
+router.post('/laudos', autenticar, rateLimitLaudosCriar, uploadUnico('arquivo'), uploadLaudo);
 router.get('/laudos', autenticar, listar);
 router.delete('/laudos/:id', autenticar, excluir);
 router.get('/laudos/grafico/evolucao-lesoes', autenticar, evolucaoLesoes);
