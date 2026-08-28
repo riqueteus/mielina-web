@@ -14,7 +14,7 @@ export async function postPergunta(pergunta: string) {
 export async function getDocs() {
   const resposta = await fetch(`${RAG_SERVICE_URL}/docs`, {
     method: 'GET',
-    signal: AbortSignal.timeout(10_000),
+    signal: AbortSignal.timeout(60_000),
   });
 
   return resposta;

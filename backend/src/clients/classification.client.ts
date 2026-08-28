@@ -14,7 +14,7 @@ export async function postPrever(dados: Record<string, number>) {
 export async function getHealth() {
   const resposta = await fetch(`${CLASSIFICATION_SERVICE_URL}/health`, {
     method: 'GET',
-    signal: AbortSignal.timeout(10_000),
+    signal: AbortSignal.timeout(60_000),
   });
 
   return resposta;
