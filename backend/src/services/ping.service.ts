@@ -11,9 +11,11 @@ const SERVICOS_REGISTRADOS: { nome: string; ping: PingFn }[] = [
   { nome: 'laudo', ping: pingLaudo },
 ];
 
-// Cache simples para não bombardear o Render: se o frontend ficar fazendo polling
-// a cada 8s, o backend reutiliza o último resultado por 15s sem bater nos 3 serviços
-const CACHE_TTL_MS = 15_000;
+// Cache só para sucesso: evita bombardear o Render quando já está acordado.
+// Falha NÃO é cacheada por muito tempo, senão o Render acorda em 30s mas ficamos
+// retornando "ainda acordando" por 15s sem nem bater nele.
+const CACHE_TTL_OK_MS = 30_000;
+const CACHE_TTL_FAIL_MS = 3_000;
 type CacheEntry = { servicos: PingServico[]; todosProntos: boolean; expiraEm: number };
 const cache = new Map<string, CacheEntry>();
 
@@ -64,7 +66,9 @@ export async function pingTodosServicos(nomes?: string[]): Promise<{
     console.log('Algum(ns) servico(s) ainda acordando...');
   }
 
-  cache.set(chave, { servicos, todosProntos, expiraEm: Date.now() + CACHE_TTL_MS });
+  // Só cacheia sucesso por 30s; falha fica só 3s para tentar de novo logo
+  const ttl = todosProntos ? CACHE_TTL_OK_MS : CACHE_TTL_FAIL_MS;
+  cache.set(chave, { servicos, todosProntos, expiraEm: Date.now() + ttl });
 
   return { servicos, todosProntos };
 }
