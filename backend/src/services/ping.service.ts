@@ -31,18 +31,22 @@ function servicosFiltrados(nomes: string[] | undefined) {
   return filtrados.length > 0 ? filtrados : SERVICOS_REGISTRADOS;
 }
 
-export async function pingTodosServicos(nomes?: string[]): Promise<{
+export async function pingTodosServicos(nomes?: string[], force = false): Promise<{
   servicos: PingServico[];
   todosProntos: boolean;
 }> {
   const alvos = servicosFiltrados(nomes);
   const chave = chaveCache(nomes && alvos.length !== SERVICOS_REGISTRADOS.length ? nomes : undefined);
 
-  // Se tem cache válido, retorna sem bater no Render
-  const cached = cache.get(chave);
-  if (cached && Date.now() < cached.expiraEm) {
-    console.log(`Ping cache hit (${chave}) — retornando sem chamar Render`);
-    return { servicos: cached.servicos, todosProntos: cached.todosProntos };
+  // Warmup do login (force=true) NUNCA usa cache - tem que bater no Render de verdade
+  if (!force) {
+    const cached = cache.get(chave);
+    if (cached && Date.now() < cached.expiraEm) {
+      console.log(`Ping cache hit (${chave}) — retornando sem chamar Render`);
+      return { servicos: cached.servicos, todosProntos: cached.todosProntos };
+    }
+  } else {
+    console.log(`Ping warmup (force) — ignorando cache para ${chave}`);
   }
 
   console.log(`Ping recebido — consultando ${alvos.length} servico(s): ${alvos.map((s) => s.nome).join(', ')}`);

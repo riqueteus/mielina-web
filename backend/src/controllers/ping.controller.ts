@@ -9,6 +9,7 @@ export async function ping(req: Request, res: Response) {
   } else if (Array.isArray(q)) {
     nomes = (q as string[]).flatMap((s) => s.split(',')).map((s) => s.trim()).filter(Boolean);
   }
-  const resultado = await pingTodosServicos(nomes);
+  const force = req.query.force === 'true' || req.query.warmup === 'true';
+  const resultado = await pingTodosServicos(nomes, force);
   return res.json(resultado);
 }

@@ -14,13 +14,15 @@ export interface PingResposta {
 export function pingServicosIA(): void {
   if (typeof window === 'undefined') return;
 
-  const url = `${API_URL}/api/ping`;
+  // Simples: logou -> acorda os 3 em paralelo, sem depender de cache
+  // Cada fetch acorda 1 serviço no Render (60s de timeout no backend)
+  const servicos = ['rag', 'classification', 'laudo'] as const;
 
-  fetch(url, {
-    method: 'GET',
-    keepalive: true,
-  }).catch((err: unknown) => {
-    const mensagem = err instanceof Error ? err.message : String(err);
-    console.warn('[mielina] Falha ao pingar servicos de IA:', mensagem);
-  });
+  for (const nome of servicos) {
+    const url = `${API_URL}/api/ping?servico=${nome}&force=true`;
+    fetch(url, { method: 'GET', keepalive: true }).catch((err: unknown) => {
+      const mensagem = err instanceof Error ? err.message : String(err);
+      console.warn(`[mielina] Falha ao acordar ${nome}:`, mensagem);
+    });
+  }
 }
