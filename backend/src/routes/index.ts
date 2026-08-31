@@ -5,6 +5,8 @@ import pingRoutes from './ping.routes';
 import chatRoutes from './chat.routes';
 import classificationRoutes from './classification.routes';
 import laudoRoutes from './laudo.routes';
+import chatHistoricoRoutes from './chat-historico.routes';
+import triagemHistoricoRoutes from './triagem-historico.routes';
 import { autenticar } from '../middlewares/auth.middleware';
 
 const router = Router();
@@ -19,5 +21,7 @@ router.use(autenticar);
 router.use(chatRoutes);
 router.use(classificationRoutes);
 router.use(laudoRoutes);
+router.use(chatHistoricoRoutes);
+router.use(triagemHistoricoRoutes);
 
 export default router;
