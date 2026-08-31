@@ -5,7 +5,7 @@ import AvisoTriagem from "../components/triagem/AvisoTriagem"
 import QuestionarioTriagem from "../components/triagem/QuestionarioTriagem"
 import { enviarTriagem } from "../services/classification.service"
 import { salvarTriagemAPI } from "../services/triagem-historico.service"
-import type { DadosTriagem } from "../types/classification.types"
+import type { DadosTriagem, NivelRisco } from "../types/classification.types"
 
 type FaseTriagem = "aviso" | "questionario"
 
@@ -34,7 +34,7 @@ function Triagem() {
     // Antes salvava local, agora só no Postgres igual aos laudos
     await salvarTriagemAPI({
       percentualRisco: previsao.percentualRisco ?? 0,
-      nivel: (previsao.nivel as any) ?? "baixo",
+      nivel: (previsao.nivel ?? "baixo") as NivelRisco,
       mensagem: previsao.mensagem,
       payload: dados,
     }).catch(() => {})
