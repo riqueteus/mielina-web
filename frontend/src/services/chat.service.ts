@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabase';
 import type {
   ResultadoPergunta,
   RespostaErro,
@@ -10,6 +11,13 @@ import {
   TENTATIVAS_PERGUNTA,
 } from '../config/chat.config';
 import { verificarStatusServico } from './status.service';
+
+async function obterToken(): Promise<string> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) throw new Error('Sessão expirada. Faça login novamente.');
+  return token;
+}
 
 const SERVICO_CHAT = 'rag';
 
@@ -24,9 +32,13 @@ export async function enviarPergunta(
   tentativasRestantes = TENTATIVAS_PERGUNTA
 ): Promise<ResultadoPergunta> {
   try {
+    const token = await obterToken();
     const resposta = await fetch(`${API_URL}/api/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ pergunta }),
     });
 
