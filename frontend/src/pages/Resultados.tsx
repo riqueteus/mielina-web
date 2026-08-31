@@ -1,11 +1,11 @@
-import { useMemo } from "react"
+import { useEffect, useState } from "react"
 import { Box, Button, HStack, Icon, Text, VStack } from "@chakra-ui/react"
 import { FaChartLine, FaFileLines } from "react-icons/fa6"
 import { useNavigate } from "react-router-dom"
 import ResultadoCard from "../components/resultados/ResultadoCard"
 import ResultadoTriagem from "../components/triagem/ResultadoTriagem"
 import { useAuth } from "../hooks/useAuth"
-import { carregarResultados } from "../storage/resultados.storage"
+import { listarTriagensAPI } from "../services/triagem-historico.service"
 import type { ResultadoTriagemHistorico } from "../types/resultados.types"
 
 function Resultados() {
@@ -14,10 +14,27 @@ function Resultados() {
 
   const userId = session?.user.id
 
-  const resultados = useMemo(
-    () => (userId ? carregarResultados(userId) : []),
-    [userId]
-  )
+  // Seguro de fato: NENHUM dado sensível no localStorage, só Postgres com RLS
+  const [resultados, setResultados] = useState<ResultadoTriagemHistorico[]>([])
+  useEffect(() => {
+    if (!userId) return
+    listarTriagensAPI()
+      .then((lista: any[]) => {
+        const mapped: ResultadoTriagemHistorico[] = lista.map((t) => ({
+          id: t.id,
+          tipo: "triagem" as const,
+          criadoEm: t.criado_em,
+          percentualRisco: Number(t.percentual_risco),
+          nivel: t.nivel,
+          mensagem: t.mensagem ?? undefined,
+        }))
+        mapped.sort((a, b) => (a.criadoEm < b.criadoEm ? 1 : -1))
+        setResultados(mapped)
+      })
+      .catch(() => {
+        setResultados([])
+      })
+  }, [userId])
 
   const ultimo = resultados[0] as ResultadoTriagemHistorico | undefined
   const anteriores = resultados.slice(1)

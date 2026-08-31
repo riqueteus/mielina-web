@@ -3,16 +3,13 @@ import { Box, VStack } from "@chakra-ui/react"
 import { useNavigate } from "react-router-dom"
 import AvisoTriagem from "../components/triagem/AvisoTriagem"
 import QuestionarioTriagem from "../components/triagem/QuestionarioTriagem"
-import { useAuth } from "../hooks/useAuth"
 import { enviarTriagem } from "../services/classification.service"
-import { salvarResultadoLocal } from "../storage/resultados.storage"
+import { salvarTriagemAPI } from "../services/triagem-historico.service"
 import type { DadosTriagem } from "../types/classification.types"
-import type { ResultadoTriagemHistorico } from "../types/resultados.types"
 
 type FaseTriagem = "aviso" | "questionario"
 
 function Triagem() {
-  const { session } = useAuth()
   const navigate = useNavigate()
   const [fase, setFase] = useState<FaseTriagem>("aviso")
   const [enviando, setEnviando] = useState(false)
@@ -33,18 +30,14 @@ function Triagem() {
       return
     }
 
-    const userId = session?.user.id
-    if (userId) {
-      const registro: ResultadoTriagemHistorico = {
-        id: crypto.randomUUID(),
-        tipo: "triagem",
-        criadoEm: new Date().toISOString(),
-        percentualRisco: previsao.percentualRisco ?? 0,
-        nivel: previsao.nivel ?? "baixo",
-        mensagem: previsao.mensagem,
-      }
-      salvarResultadoLocal(userId, registro)
-    }
+    // Seguro de fato: NENHUM dado sensível no localStorage, só Supabase com RLS
+    // Antes salvava local, agora só no Postgres igual aos laudos
+    await salvarTriagemAPI({
+      percentualRisco: previsao.percentualRisco ?? 0,
+      nivel: (previsao.nivel as any) ?? "baixo",
+      mensagem: previsao.mensagem,
+      payload: dados,
+    }).catch(() => {})
 
     setEnviando(false)
     navigate("/resultados")

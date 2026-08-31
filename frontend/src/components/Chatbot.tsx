@@ -12,15 +12,15 @@ import {
   Alert,
   Icon,
 } from '@chakra-ui/react';
-import { FiSend } from 'react-icons/fi';
+import { FiSend, FiPlus } from 'react-icons/fi';
 
 import type { Mensagem, StatusRag } from '../types/chat.types';
 import { MENSAGEM_BOAS_VINDAS } from '../config/chat.config';
-import { carregarHistorico, salvarHistorico } from '../storage/chat.storage';
+import { carregarHistoricoAPI, limparHistoricoAPI, salvarMensagemAPI } from '../services/chat-historico.service';
 import { verificarStatusIA, enviarPergunta } from '../services/chat.service';
 
 export default function Chatbot({ userId }: { userId: string }) {
-  const [mensagens, setMensagens] = useState<Mensagem[]>(() => carregarHistorico(userId));
+  const [mensagens, setMensagens] = useState<Mensagem[]>([]);
   const [input, setInput] = useState('');
   const [carregando, setCarregando] = useState(false);
   const [statusRag, setStatusRag] = useState<StatusRag>('verificando');
@@ -33,14 +33,31 @@ export default function Chatbot({ userId }: { userId: string }) {
     }
   }, [mensagens]);
 
+  // Seguro de fato: NENHUM dado sensível no localStorage, só Postgres com RLS
   useEffect(() => {
-    salvarHistorico(userId, mensagens);
-  }, [mensagens, userId]);
+    carregarHistoricoAPI()
+      .then((historico) => {
+        setMensagens(historico);
+      })
+      .catch(() => {
+        // offline ou erro: mantém vazio, não usa localStorage pra dado sensível
+      });
+  }, [userId]);
 
   useEffect(() => {
     const cleanup = verificarStatusIA(setStatusRag);
     return cleanup;
   }, []);
+
+  const criarNovoChat = async () => {
+    if (carregando) return;
+    try {
+      await limparHistoricoAPI();
+      setMensagens([]);
+    } catch (err) {
+      console.warn('[mielina] Falha ao criar novo chat:', err);
+    }
+  };
 
   const enviarPerguntaHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -48,10 +65,12 @@ export default function Chatbot({ userId }: { userId: string }) {
     if (!pergunta || carregando) return;
 
     const idUsuario = Date.now();
-    setMensagens((antes) => [
-      ...antes,
-      { id: idUsuario, tipo: 'usuario', texto: pergunta },
-    ]);
+    const msgUsuario = { id: idUsuario, tipo: 'usuario' as const, texto: pergunta };
+    setMensagens((antes) => [...antes, msgUsuario]);
+    // Seguro: salva no Supabase (RLS) além do localStorage
+    salvarMensagemAPI({ tipo: 'usuario', texto: pergunta }).catch((err) => {
+      console.warn('[mielina] Falha ao salvar pergunta:', err);
+    });
     setInput('');
     setCarregando(true);
     perguntaPendenteRef.current = pergunta;
@@ -60,15 +79,16 @@ export default function Chatbot({ userId }: { userId: string }) {
 
     if (resultado.sucesso) {
       const idIA = Date.now() + 1;
-      setMensagens((antes) => [
-        ...antes,
-        {
-          id: idIA,
-          tipo: 'ia',
-          texto: resultado.resposta || '(Sem resposta)',
-          fontes: resultado.fontes,
-        },
-      ]);
+      const msgIA = {
+        id: idIA,
+        tipo: 'ia' as const,
+        texto: resultado.resposta || '(Sem resposta)',
+        fontes: resultado.fontes,
+      };
+      setMensagens((antes) => [...antes, msgIA]);
+      salvarMensagemAPI({ tipo: 'ia', texto: msgIA.texto, fontes: msgIA.fontes }).catch((err) => {
+        console.warn('[mielina] Falha ao salvar resposta:', err);
+      });
 
       if (statusRag !== 'pronto') {
         setStatusRag('pronto');
@@ -97,50 +117,55 @@ export default function Chatbot({ userId }: { userId: string }) {
   return (
     <VStack gap="4" align="stretch" w="100%">
       <VStack gap="2" align="stretch" w="100%">
-        <HStack gap="2" align="center">
-          {statusRag === 'pronto' ? (
-            <Box w="2" h="2" rounded="full" bg="green.500" flexShrink={0} />
-          ) : statusRag === 'indisponivel' ? (
-            <Box w="2" h="2" rounded="full" bg="red.500" flexShrink={0} />
-          ) : (
-            <Spinner size="sm" color="purple.500" />
-          )}
-          <Text
-            fontSize="sm"
-            fontWeight="medium"
-            color={
-              statusRag === 'indisponivel'
-                ? 'red.600'
+        <HStack justify="space-between" align="center">
+          <HStack gap="2" align="center">
+            {statusRag === 'pronto' ? (
+              <Box w="2" h="2" rounded="full" bg="green.500" flexShrink={0} />
+            ) : statusRag === 'indisponivel' ? (
+              <Box w="2" h="2" rounded="full" bg="red.500" flexShrink={0} />
+            ) : (
+              <Spinner size="sm" color="purple.500" />
+            )}
+            <Text
+              fontSize="sm"
+              fontWeight="medium"
+              color={
+                statusRag === 'indisponivel'
+                  ? 'red.600'
+                  : statusRag === 'pronto'
+                  ? 'purple.700'
+                  : 'purple.700'
+              }
+            >
+              {statusRag === 'verificando'
+                ? 'Inicializando IA...'
+                : statusRag === 'acordando'
+                ? 'Inicializando IA...'
                 : statusRag === 'pronto'
-                ? 'purple.700'
-                : 'purple.700'
-            }
+                ? 'IA pronta para responder.'
+                : 'Não foi possível conectar à IA. Tente novamente em alguns instantes.'}
+            </Text>
+          </HStack>
+          <Button
+            size="md"
+            variant="ghost"
+            colorScheme="purple"
+            onClick={criarNovoChat}
+            disabled={carregando || mensagens.length === 0}
+            title="Começar novo chat do zero"
           >
-            {statusRag === 'verificando'
-              ? 'Inicializando IA...'
-              : statusRag === 'acordando'
-              ? 'Inicializando IA...'
-              : statusRag === 'pronto'
-              ? 'IA pronta para responder.'
-              : 'Não foi possível conectar à IA. Tente novamente em alguns instantes.'}
-          </Text>
+            <Icon as={FiPlus} mr="1" />
+            Novo chat
+          </Button>
         </HStack>
 
-        <Text
-          fontSize="md"
-          color="gray.100"
-          lineHeight="1.5"
-          fontStyle="italic"
-          px="3"
-          py="2"
-          bg="#2563eb"
-          rounded="md"
-          borderLeft="2px solid"
-          borderColor="#2563eb"
-        >
-          Este chatbot tem caráter informativo e não substitui a orientação, o
-          diagnóstico ou o tratamento realizado por um profissional de saúde.
-        </Text>
+        <Alert.Root status="info" variant="subtle" rounded="md" size="sm" bg="blue.50" border="1px solid" borderColor="blue.100">
+          <Alert.Content px="2" py="1">
+            <Alert.Description fontSize="md" color="blue.700">
+              Este chat não tem memória entre perguntas e tem caráter informativo, não substitui um profissional de saúde. Cada pergunta é analisada de forma independente. Use o botão "Novo chat" para começar outro chat do zero.
+            </Alert.Description>
+          </Alert.Content>
+        </Alert.Root>
       </VStack>
 
       <Box
