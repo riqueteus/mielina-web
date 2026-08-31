@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Box, VStack } from "@chakra-ui/react"
 import { useNavigate } from "react-router-dom"
 import AvisoTriagem from "../components/triagem/AvisoTriagem"
 import QuestionarioTriagem from "../components/triagem/QuestionarioTriagem"
 import { useAuth } from "../hooks/useAuth"
 import { enviarTriagem } from "../services/classification.service"
-import { pingServicosIA } from "../services/ping.service"
 import { salvarResultadoLocal } from "../storage/resultados.storage"
 import type { DadosTriagem } from "../types/classification.types"
 import type { ResultadoTriagemHistorico } from "../types/resultados.types"
@@ -18,10 +17,6 @@ function Triagem() {
   const [fase, setFase] = useState<FaseTriagem>("aviso")
   const [enviando, setEnviando] = useState(false)
   const [erroEnvio, setErroEnvio] = useState<string | null>(null)
-
-  useEffect(() => {
-    pingServicosIA()
-  }, [])
 
   const aoSubmeter = async (dados: DadosTriagem) => {
     setEnviando(true)
