@@ -35,6 +35,14 @@ function iniciarRestauracao(): Promise<void> {
   return restauracaoIniciada
 }
 
+function aquecerServicosIA(session: Session | null): void {
+  const userId = session?.user?.id
+  if (!userId || ultimoUsuarioPingado === userId) return
+
+  ultimoUsuarioPingado = userId
+  pingServicosIA()
+}
+
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
@@ -43,6 +51,7 @@ export function useAuth() {
     iniciarRestauracao().finally(() => {
       supabase.auth.getSession().then(({ data }) => {
         setSession(data.session)
+        aquecerServicosIA(data.session)
         setLoading(false)
       })
     })
@@ -60,13 +69,7 @@ export function useAuth() {
         salvarSessaoNoBackend(session.refresh_token)
       }
 
-      if ((event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') || !session?.user?.id) return
-
-      const userId = session.user.id
-      if (ultimoUsuarioPingado === userId) return
-      ultimoUsuarioPingado = userId
-
-      pingServicosIA()
+      aquecerServicosIA(session)
     })
 
     return () => listener.subscription.unsubscribe()
