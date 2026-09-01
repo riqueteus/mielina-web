@@ -60,7 +60,7 @@ export function useAuth() {
         salvarSessaoNoBackend(session.refresh_token)
       }
 
-      if (event !== 'SIGNED_IN' || !session?.user?.id) return
+      if ((event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') || !session?.user?.id) return
 
       const userId = session.user.id
       if (ultimoUsuarioPingado === userId) return
