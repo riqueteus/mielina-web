@@ -1,6 +1,8 @@
 import type { Mensagem } from '../types/chat.types';
 
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+function normalizarUrl(url: string) { return url.trim().replace(/\/+$/, ''); }
+
+export const API_URL = normalizarUrl(import.meta.env.VITE_API_URL || 'http://localhost:3001');
 
 export const STORAGE_KEY = 'mielina-chat-historico';
 

@@ -2,14 +2,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+function normalizarUrl(url: string) { return url.trim().replace(/\/+$/, ''); }
+
 const PORT = process.env.PORT || 3001;
 
-const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL;
-const FRONTEND_URL = process.env.FRONTEND_URL;
-const CLASSIFICATION_SERVICE_URL = process.env.CLASSIFICATION_SERVICE_URL;
-const LAUDO_SERVICE_URL = process.env.LAUDO_SERVICE_URL;
+const RAG_SERVICE_URL = normalizarUrl(process.env.RAG_SERVICE_URL || '');
+const FRONTEND_URL = normalizarUrl(process.env.FRONTEND_URL || '');
+const CLASSIFICATION_SERVICE_URL = normalizarUrl(process.env.CLASSIFICATION_SERVICE_URL || '');
+const LAUDO_SERVICE_URL = normalizarUrl(process.env.LAUDO_SERVICE_URL || '');
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_URL = normalizarUrl(process.env.SUPABASE_URL || '');
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 const REDIS_URL = process.env.REDIS_URL || undefined;

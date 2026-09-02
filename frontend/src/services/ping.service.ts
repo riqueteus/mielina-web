@@ -20,9 +20,14 @@ export function pingServicosIA(): void {
 
   for (const nome of servicos) {
     const url = `${API_URL}/api/ping?servico=${nome}&force=true`;
-    fetch(url, { method: 'GET', keepalive: true }).catch((err: unknown) => {
-      const mensagem = err instanceof Error ? err.message : String(err);
-      console.warn(`[mielina] Falha ao acordar ${nome}:`, mensagem);
-    });
+    fetch(url, { method: 'GET', keepalive: true })
+      .then((r) => {
+        if (!r.ok) console.warn(`[mielina] Ping ${nome} retornou ${r.status}`);
+        return r;
+      })
+      .catch((err: unknown) => {
+        const mensagem = err instanceof Error ? err.message : String(err);
+        console.warn(`[mielina] Falha ao acordar ${nome}:`, mensagem);
+      });
   }
 }

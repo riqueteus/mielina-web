@@ -1,7 +1,7 @@
 import { FRONTEND_URL } from '../env';
 
 function normalizarOrigem(url: string): string {
-  return url.replace(/\/$/, '').toLowerCase();
+  return url.trim().replace(/\/$/, '').toLowerCase();
 }
 
 export function validarOrigem(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
