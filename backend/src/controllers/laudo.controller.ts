@@ -27,6 +27,7 @@ function tratarErro(err: unknown, res: Response) {
 
 export async function uploadLaudo(req: Request, res: Response) {
   const { supabase, usuario_id } = req as RequisicaoAutenticada;
+  console.log(`[BACKEND] ${new Date().toISOString()} - rota POST /api/laudos; arquivo=${req.file ? 'presente' : 'ausente'}; tamanhoBytes=${req.file?.size ?? 0}`);
 
   try {
     const arquivo = req.file;
@@ -46,7 +47,9 @@ export async function uploadLaudo(req: Request, res: Response) {
     const hashPdf = calcularHashPdf(arquivo.buffer);
     await verificarLaudoDuplicado(supabase, usuario_id, hashPdf);
 
+    console.log(`[BACKEND] ${new Date().toISOString()} - encaminhando PDF ao serviço de Laudo; tamanhoBytes=${arquivo.size}`);
     const resultado = await extrairLaudo(arquivo.buffer, nomeOriginal);
+    console.log(`[BACKEND] ${new Date().toISOString()} - retorno do serviço de Laudo; extração concluída`);
 
     const laudo = await salvarLaudoCompleto({
       supabase,

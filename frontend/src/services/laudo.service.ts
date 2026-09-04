@@ -17,6 +17,7 @@ async function obterToken(): Promise<string> {
 export async function enviarLaudoPDF(arquivo: File): Promise<ResultadoEnvioLaudo> {
   try {
     const token = await obterToken()
+    console.log(`[FRONTEND] ${new Date().toISOString()} - enviar laudo; tamanhoBytes=${arquivo.size}; tipo=${arquivo.type}`)
 
     const form = new FormData()
     form.append("arquivo", arquivo)
@@ -26,6 +27,7 @@ export async function enviarLaudoPDF(arquivo: File): Promise<ResultadoEnvioLaudo
       headers: { Authorization: `Bearer ${token}` },
       body: form,
     })
+    console.log(`[FRONTEND] ${new Date().toISOString()} - resposta enviar laudo; status=${resposta.status}`)
 
     if (!resposta.ok) {
       try {
@@ -43,6 +45,7 @@ export async function enviarLaudoPDF(arquivo: File): Promise<ResultadoEnvioLaudo
     const dados = (await resposta.json()) as { laudo: Laudo }
     return { sucesso: true, laudo: dados.laudo }
   } catch (err: unknown) {
+    console.log(`[FRONTEND] ${new Date().toISOString()} - erro ao enviar laudo`, err)
     return {
       sucesso: false,
       erro: err instanceof Error ? err.message : "Erro ao enviar o laudo.",

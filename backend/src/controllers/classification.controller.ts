@@ -23,6 +23,7 @@ const CAMPOS_OBRIGATORIOS = [
 
 export async function prever(req: Request, res: Response) {
   const corpo = req.body;
+  console.log(`[BACKEND] ${new Date().toISOString()} - rota POST /api/triagem/prever; campos=${corpo && typeof corpo === 'object' ? Object.keys(corpo).length : 'inválido'}`);
 
   if (!corpo || typeof corpo !== 'object') {
     return res.status(400).json({ erro: 'Corpo da requisição é obrigatório.' });
@@ -47,6 +48,7 @@ export async function prever(req: Request, res: Response) {
   console.log(`Triagem recebida — encaminhando para ${CLASSIFICATION_SERVICE_URL}/classification/prever`);
 
   const resultado = await preverComRetry(dados);
+  console.log(`[BACKEND] ${new Date().toISOString()} - retorno do Classification para POST /api/triagem/prever; status=${resultado.status}; ok=${resultado.ok}`);
 
   if (resultado.ok) {
     console.log('Classification service respondeu com sucesso!');

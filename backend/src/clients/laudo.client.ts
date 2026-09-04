@@ -17,6 +17,7 @@ export async function getHealth() {
 
 async function chamarLaudo(url: string, init: RequestInit, parametros?: unknown) {
   const inicio = Date.now();
+  console.log(`[CLIENT] Laudo ${new Date().toISOString()} - início; url=${url}`);
   console.log(`[LAUDO] Iniciando chamada ${init.method || 'GET'} ${url}`, parametros);
   try {
     const resposta = await fetchComRetry(url, init);

@@ -35,6 +35,7 @@ export async function enviarTriagem(
 ): Promise<ResultadoPrevisao> {
   try {
     const token = await obterToken();
+    console.log(`[FRONTEND] ${new Date().toISOString()} - enviar triagem; tentativaRestante=${tentativasRestantes}; campos=${Object.keys(dados).length}`);
     const resposta = await fetch(`${API_URL}/api/triagem/prever`, {
       method: 'POST',
       headers: {
@@ -43,6 +44,7 @@ export async function enviarTriagem(
       },
       body: JSON.stringify(dados),
     });
+    console.log(`[FRONTEND] ${new Date().toISOString()} - resposta enviar triagem; status=${resposta.status}`);
 
     if (!resposta.ok) {
       let erroDados: RespostaErroClassificacao = {};
@@ -86,6 +88,7 @@ export async function enviarTriagem(
       mensagem: dadosResposta.mensagem,
     };
   } catch (err: unknown) {
+    console.log(`[FRONTEND] ${new Date().toISOString()} - erro ao enviar triagem`, err);
     const mensagemErro =
       err instanceof Error ? err.message : 'Erro desconhecido. Tente novamente.';
 

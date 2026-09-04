@@ -13,6 +13,7 @@ export async function getHealth() {
 
 async function chamarClassification(url: string, init: RequestInit, parametros?: unknown) {
   const inicio = Date.now();
+  console.log(`[CLIENT] Classification ${new Date().toISOString()} - início; url=${url}`);
   console.log(`[CLASS] Iniciando chamada ${init.method || 'GET'} ${url}`, parametros);
   try {
     const resposta = await fetchComRetry(url, init);

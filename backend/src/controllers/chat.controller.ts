@@ -4,6 +4,7 @@ import { RAG_SERVICE_URL } from '../env';
 
 export async function chat(req: Request, res: Response) {
   const { pergunta } = req.body;
+  console.log(`[BACKEND] ${new Date().toISOString()} - rota POST /api/chat; tamanhoPergunta=${typeof pergunta === 'string' ? pergunta.length : 'inválida'}`);
 
   if (!pergunta || typeof pergunta !== 'string' || !pergunta.trim()) {
     return res.status(400).json({ erro: 'Campo "pergunta" é obrigatório.' });
@@ -13,6 +14,7 @@ export async function chat(req: Request, res: Response) {
   console.log(`Encaminhando para RAG em ${RAG_SERVICE_URL}/pergunta`);
 
   const resultado = await chamarRAGComRetry(pergunta);
+  console.log(`[BACKEND] ${new Date().toISOString()} - retorno do RAG para POST /api/chat; status=${resultado.status}; ok=${resultado.ok}`);
 
   if (resultado.ok) {
     console.log('RAG respondeu com sucesso!');

@@ -28,7 +28,7 @@ export async function fetchComRetry(
     const numeroTentativa = tentativa + 1;
     const timeoutMs = TEMPOS_LIMITE_MS[tentativa];
     const inicioTentativa = Date.now();
-    console.log(`[RETRY] Tentativa ${numeroTentativa}/${MAX_TENTATIVAS} para ${url}; timeout=${timeoutMs}ms`);
+    console.log(`[RETRY] ${new Date().toISOString()} - tentativa ${numeroTentativa}/${MAX_TENTATIVAS}; decorrido=${Date.now() - inicioTotal}ms; url=${url}; timeout=${timeoutMs}ms`);
     const controlador = new AbortController();
     const timeoutId = setTimeout(() => controlador.abort(), timeoutMs);
 
@@ -40,7 +40,7 @@ export async function fetchComRetry(
     try {
       const resposta = await fetch(url, { ...init, signal: sinal });
       clearTimeout(timeoutId);
-      console.log(`[RETRY] Sucesso na tentativa ${numeroTentativa}/${MAX_TENTATIVAS} em ${Date.now() - inicioTentativa}ms; total=${Date.now() - inicioTotal}ms; status=${resposta.status}`);
+      console.log(`[RETRY] ${new Date().toISOString()} - resposta; tentativa=${numeroTentativa}/${MAX_TENTATIVAS}; decorrido=${Date.now() - inicioTotal}ms; status=${resposta.status}`);
       return resposta;
     } catch (erro) {
       clearTimeout(timeoutId);

@@ -27,8 +27,11 @@ export function verificarStatusServico(
 
   const aquecerServico = async () => {
     tentativa++;
+    const url = `${API_URL}/api/ping?servico=${encodeURIComponent(nomeServico)}`;
+    console.log(`[FRONTEND] ${new Date().toISOString()} - polling status; serviço=${nomeServico}; tentativa=${tentativa}; url=${url}`);
     try {
-      const res = await fetch(`${API_URL}/api/ping?servico=${encodeURIComponent(nomeServico)}`, { method: 'GET' });
+      const res = await fetch(url, { method: 'GET' });
+      console.log(`[FRONTEND] ${new Date().toISOString()} - resposta do polling; serviço=${nomeServico}; status=${res.status}`);
       if (cancelado) return;
       const dados = (await res.json().catch(() => null)) as PingResposta | null;
       if (cancelado) return;
@@ -40,7 +43,8 @@ export function verificarStatusServico(
       }
 
       falhou();
-    } catch {
+    } catch (erro) {
+      console.log(`[FRONTEND] ${new Date().toISOString()} - erro no polling; serviço=${nomeServico}`, erro);
       falhou();
     }
   };

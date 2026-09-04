@@ -13,6 +13,7 @@ export async function getDocs() {
 
 async function chamarRag(url: string, init: RequestInit, parametros?: unknown) {
   const inicio = Date.now();
+  console.log(`[CLIENT] RAG ${new Date().toISOString()} - início; url=${url}`);
   console.log(`[RAG] Iniciando chamada ${init.method || 'GET'} ${url}`, parametros);
   try {
     const resposta = await fetchComRetry(url, init);

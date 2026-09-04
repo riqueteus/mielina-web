@@ -20,8 +20,10 @@ export function pingServicosIA(): void {
 
   for (const nome of servicos) {
     const url = `${API_URL}/api/ping?servico=${nome}&force=true`;
+    console.log(`[WARMUP] ${new Date().toISOString()} - disparando warmup; serviço=${nome}; force=true; url=${url}`);
     fetch(url, { method: 'GET', keepalive: true })
       .then((r) => {
+        console.log(`[FRONTEND] ${new Date().toISOString()} - resposta do warmup; serviço=${nome}; status=${r.status}`);
         if (!r.ok) console.warn(`[mielina] Ping ${nome} retornou ${r.status}`);
         return r;
       })

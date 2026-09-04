@@ -12,6 +12,7 @@ export async function ping(req: Request, res: Response) {
     nomes = (q as string[]).flatMap((s) => s.split(',')).map((s) => s.trim()).filter(Boolean);
   }
   const force = req.query.force === 'true' || req.query.warmup === 'true';
+  console.log(`[WARMUP] ${new Date().toISOString()} - ping recebido; force=${force}; serviços=${nomes?.join(', ') || 'todos'}`);
   console.log(`[PING] Serviços solicitados: ${nomes?.join(', ') || 'todos'}; force=${force}`);
   const resultado = await pingTodosServicos(nomes, force);
   console.log(`[PING] Resultado enviado em ${Date.now() - inicio}ms`, {

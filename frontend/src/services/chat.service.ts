@@ -33,6 +33,7 @@ export async function enviarPergunta(
 ): Promise<ResultadoPergunta> {
   try {
     const token = await obterToken();
+    console.log(`[FRONTEND] ${new Date().toISOString()} - enviar pergunta; tentativaRestante=${tentativasRestantes}; tamanhoPergunta=${pergunta.length}`);
     const resposta = await fetch(`${API_URL}/api/chat`, {
       method: 'POST',
       headers: {
@@ -41,6 +42,7 @@ export async function enviarPergunta(
       },
       body: JSON.stringify({ pergunta }),
     });
+    console.log(`[FRONTEND] ${new Date().toISOString()} - resposta enviar pergunta; status=${resposta.status}`);
 
     if (!resposta.ok) {
       let erroDados: RespostaErro = {};
@@ -70,6 +72,7 @@ export async function enviarPergunta(
       fontes: dados.fontes,
     };
   } catch (err: unknown) {
+    console.log(`[FRONTEND] ${new Date().toISOString()} - erro ao enviar pergunta`, err);
     const mensagemErro =
       err instanceof Error ? err.message : 'Erro desconhecido. Tente novamente.';
 
