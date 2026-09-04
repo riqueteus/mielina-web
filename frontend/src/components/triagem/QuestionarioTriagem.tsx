@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react"
 import { FaArrowLeft, FaArrowRight, FaCheck, FaHeartPulse } from "react-icons/fa6"
 import { ETAPAS_TRIAGEM, MENSAGEM_IA_ACORDANDO } from "../../config/classification.config"
+import { MENSAGEM_INICIALIZACAO_IA } from "../../config/chat.config"
 import {
   campoRespondido,
   montarPayload,
@@ -104,7 +105,7 @@ function QuestionarioTriagem({
 
   const tituloStatusIa =
     statusIa === "verificando" || statusIa === "acordando"
-      ? "Preparando a IA de classificação..."
+      ? MENSAGEM_INICIALIZACAO_IA
       : statusIa === "pronto"
       ? "IA de classificação pronta."
       : "Não foi possível conectar à IA de classificação."

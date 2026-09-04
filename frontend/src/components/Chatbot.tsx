@@ -15,7 +15,7 @@ import {
 import { FiSend, FiPlus } from 'react-icons/fi';
 
 import type { Mensagem, StatusRag } from '../types/chat.types';
-import { MENSAGEM_BOAS_VINDAS } from '../config/chat.config';
+import { MENSAGEM_BOAS_VINDAS, MENSAGEM_INICIALIZACAO_IA } from '../config/chat.config';
 import { carregarHistoricoAPI, limparHistoricoAPI, salvarMensagemAPI } from '../services/chat-historico.service';
 import { verificarStatusIA, enviarPergunta } from '../services/chat.service';
 
@@ -138,9 +138,9 @@ export default function Chatbot({ userId }: { userId: string }) {
               }
             >
               {statusRag === 'verificando'
-                ? 'Inicializando IA...'
+                ? MENSAGEM_INICIALIZACAO_IA
                 : statusRag === 'acordando'
-                ? 'Inicializando IA...'
+                ? MENSAGEM_INICIALIZACAO_IA
                 : statusRag === 'pronto'
                 ? 'IA pronta para responder.'
                 : 'Não foi possível conectar à IA. Tente novamente em alguns instantes.'}

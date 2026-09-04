@@ -14,8 +14,8 @@ const SERVICOS_REGISTRADOS: { nome: string; ping: PingFn }[] = [
 // Cache só para sucesso: evita bombardear o Render quando já está acordado.
 // Falha NÃO é cacheada por muito tempo, senão o Render acorda em 30s mas ficamos
 // retornando "ainda acordando" por 15s sem nem bater nele.
-const CACHE_TTL_OK_MS = 30_000;
-const CACHE_TTL_FAIL_MS = 3_000;
+const CACHE_TTL_OK_MS = 120_000;
+const CACHE_TTL_FAIL_MS = 30_000;
 type CacheEntry = { servicos: PingServico[]; todosProntos: boolean; expiraEm: number };
 const cache = new Map<string, CacheEntry>();
 

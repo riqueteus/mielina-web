@@ -1,11 +1,21 @@
 import { supabase } from "../lib/supabase"
 import { API_URL } from "../config/chat.config"
+import { verificarStatusServico } from "./status.service"
+import type { StatusServicoIA } from "../types/classification.types"
 import type {
   DistribuicaoRegiao,
   Laudo,
   PontoEvolucaoLesoes,
   ResultadoEnvioLaudo,
 } from "../types/laudo.types"
+
+const SERVICO_LAUDO = "laudo"
+
+export function verificarStatusLaudo(
+  setStatus: (status: StatusServicoIA) => void
+): () => void {
+  return verificarStatusServico(SERVICO_LAUDO, setStatus)
+}
 
 async function obterToken(): Promise<string> {
   const { data } = await supabase.auth.getSession()

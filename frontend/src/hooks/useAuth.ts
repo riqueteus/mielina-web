@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Session } from '@supabase/supabase-js'
-import { pingServicosIA } from '../services/ping.service'
 import {
   salvarSessaoNoBackend,
   restaurarSessaoDoBackend,
   encerrarSessaoNoBackend,
 } from '../services/sessao.service'
 
-let ultimoUsuarioPingado: string | null = null
 let restauracaoIniciada: Promise<void> | null = null
 
 function ehCallbackOAuth(): boolean {
@@ -35,14 +33,6 @@ function iniciarRestauracao(): Promise<void> {
   return restauracaoIniciada
 }
 
-function aquecerServicosIA(session: Session | null): void {
-  const userId = session?.user?.id
-  if (!userId || ultimoUsuarioPingado === userId) return
-
-  ultimoUsuarioPingado = userId
-  pingServicosIA()
-}
-
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
@@ -51,7 +41,6 @@ export function useAuth() {
     iniciarRestauracao().finally(() => {
       supabase.auth.getSession().then(({ data }) => {
         setSession(data.session)
-        aquecerServicosIA(data.session)
         setLoading(false)
       })
     })
@@ -60,7 +49,6 @@ export function useAuth() {
       setSession(session)
 
       if (event === 'SIGNED_OUT') {
-        ultimoUsuarioPingado = null
         encerrarSessaoNoBackend()
         return
       }
@@ -68,8 +56,6 @@ export function useAuth() {
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.refresh_token) {
         salvarSessaoNoBackend(session.refresh_token)
       }
-
-      aquecerServicosIA(session)
     })
 
     return () => listener.subscription.unsubscribe()

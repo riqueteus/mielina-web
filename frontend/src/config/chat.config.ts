@@ -16,7 +16,10 @@ export const MENSAGEM_BOAS_VINDAS: Mensagem = {
 export const DELAY_RETRY_PERGUNTA = 5000;
 export const DELAY_RETRY_PING = 15_000;
 export const TENTATIVAS_PERGUNTA = 2;
-export const TENTATIVAS_PING = 4;
+export const TENTATIVAS_PING = 6;
+
+export const MENSAGEM_INICIALIZACAO_IA =
+  'Inicializando Inteligência Artificial... Devido ao plano gratuito, a primeira inicialização pode levar até 1 minuto.';
 
 export function chaveStoragePorUsuario(userId: string): string {
   return `${STORAGE_KEY}:${userId}`;
