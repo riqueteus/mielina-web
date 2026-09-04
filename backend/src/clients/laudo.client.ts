@@ -1,4 +1,5 @@
 import { LAUDO_SERVICE_URL } from '../env';
+import { fetchComRetry } from './fetch-com-retry.client';
 
 export async function extrairLaudoDoPdf(arquivo: Buffer, nomeArquivo: string) {
   const form = new FormData();
@@ -15,9 +16,8 @@ export async function extrairLaudoDoPdf(arquivo: Buffer, nomeArquivo: string) {
 }
 
 export async function getHealth() {
-  const resposta = await fetch(`${LAUDO_SERVICE_URL}/health`, {
+  const resposta = await fetchComRetry(`${LAUDO_SERVICE_URL}/health`, {
     method: 'GET',
-    signal: AbortSignal.timeout(60_000),
   });
 
   return resposta;

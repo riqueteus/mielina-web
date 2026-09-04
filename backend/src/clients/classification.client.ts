@@ -1,4 +1,5 @@
 import { CLASSIFICATION_SERVICE_URL } from '../env';
+import { fetchComRetry } from './fetch-com-retry.client';
 
 export async function postPrever(dados: Record<string, number>) {
   const resposta = await fetch(`${CLASSIFICATION_SERVICE_URL}/classification/prever`, {
@@ -12,9 +13,8 @@ export async function postPrever(dados: Record<string, number>) {
 }
 
 export async function getHealth() {
-  const resposta = await fetch(`${CLASSIFICATION_SERVICE_URL}/health`, {
+  const resposta = await fetchComRetry(`${CLASSIFICATION_SERVICE_URL}/health`, {
     method: 'GET',
-    signal: AbortSignal.timeout(60_000),
   });
 
   return resposta;
