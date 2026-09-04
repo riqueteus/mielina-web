@@ -6,18 +6,25 @@ export async function extrairLaudoDoPdf(arquivo: Buffer, nomeArquivo: string) {
   const copia = Uint8Array.from(arquivo);
   form.append('arquivo', new Blob([copia], { type: 'application/pdf' }), nomeArquivo);
 
-  const resposta = await fetchComRetry(`${LAUDO_SERVICE_URL}/laudos/extrair`, {
-    method: 'POST',
-    body: form,
-  });
-
-  return resposta;
+  const url = `${LAUDO_SERVICE_URL}/laudos/extrair`;
+  return chamarLaudo(url, { method: 'POST', body: form }, { nomeArquivo, tamanhoBytes: arquivo.length });
 }
 
 export async function getHealth() {
-  const resposta = await fetchComRetry(`${LAUDO_SERVICE_URL}/health`, {
-    method: 'GET',
-  });
+  const url = `${LAUDO_SERVICE_URL}/health`;
+  return chamarLaudo(url, { method: 'GET' });
+}
 
-  return resposta;
+async function chamarLaudo(url: string, init: RequestInit, parametros?: unknown) {
+  const inicio = Date.now();
+  console.log(`[LAUDO] Iniciando chamada ${init.method || 'GET'} ${url}`, parametros);
+  try {
+    const resposta = await fetchComRetry(url, init);
+    const corpo = await resposta.clone().text().catch(() => '');
+    console.log(`[LAUDO] Resposta em ${Date.now() - inicio}ms; status=${resposta.status}; corpo=${corpo.slice(0, 200)}`);
+    return resposta;
+  } catch (erro) {
+    console.log(`[LAUDO] Exceção após ${Date.now() - inicio}ms`, erro instanceof Error ? erro.stack : erro);
+    throw erro;
+  }
 }

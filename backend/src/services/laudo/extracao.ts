@@ -55,9 +55,12 @@ export async function extrairLaudo(arquivo: Buffer, nomeArquivo: string) {
 }
 
 export async function pingLaudo() {
+  const inicioPing = Date.now();
+  console.log(`[LAUDO] Ping iniciado em ${new Date().toISOString()}`);
   console.log('Ping recebido — chamando laudo service');
   try {
     const resposta = await getHealth();
+    console.log(`[LAUDO] Ping recebeu status=${resposta.status} em ${Date.now() - inicioPing}ms`);
     if (resposta.ok) {
       console.log('Laudo service está acordado e respondendo!');
       return { acordado: true, mensagem: 'Serviço de laudos pronto!' };

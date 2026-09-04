@@ -74,9 +74,12 @@ export async function preverComRetry(dados: Record<string, number>, tentativas =
 }
 
 export async function pingClassification() {
+  const inicioPing = Date.now();
+  console.log(`[CLASS] Ping iniciado em ${new Date().toISOString()}`);
   console.log('Ping recebido — chamando classification service');
   try {
     const resposta = await getHealth();
+    console.log(`[CLASS] Ping recebeu status=${resposta.status} em ${Date.now() - inicioPing}ms`);
     if (resposta.ok) {
       console.log('Classification service está acordado e respondendo!');
       return { acordado: true, mensagem: 'Serviço de classificação pronto!' };

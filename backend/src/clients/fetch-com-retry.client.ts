@@ -22,10 +22,15 @@ export async function fetchComRetry(
   init: RequestInit = {},
 ): Promise<Response> {
   let ultimoErro: unknown;
+  const inicioTotal = Date.now();
 
   for (let tentativa = 0; tentativa < MAX_TENTATIVAS; tentativa++) {
+    const numeroTentativa = tentativa + 1;
+    const timeoutMs = TEMPOS_LIMITE_MS[tentativa];
+    const inicioTentativa = Date.now();
+    console.log(`[RETRY] Tentativa ${numeroTentativa}/${MAX_TENTATIVAS} para ${url}; timeout=${timeoutMs}ms`);
     const controlador = new AbortController();
-    const timeoutId = setTimeout(() => controlador.abort(), TEMPOS_LIMITE_MS[tentativa]);
+    const timeoutId = setTimeout(() => controlador.abort(), timeoutMs);
 
     const sinalExterno = init.signal;
     const sinal = sinalExterno
@@ -35,15 +40,18 @@ export async function fetchComRetry(
     try {
       const resposta = await fetch(url, { ...init, signal: sinal });
       clearTimeout(timeoutId);
+      console.log(`[RETRY] Sucesso na tentativa ${numeroTentativa}/${MAX_TENTATIVAS} em ${Date.now() - inicioTentativa}ms; total=${Date.now() - inicioTotal}ms; status=${resposta.status}`);
       return resposta;
     } catch (erro) {
       clearTimeout(timeoutId);
       ultimoErro = erro;
+      console.log(`[RETRY] Erro na tentativa ${numeroTentativa}/${MAX_TENTATIVAS} após ${Date.now() - inicioTentativa}ms`, erro instanceof Error ? erro.stack : erro);
       if (tentativa < MAX_TENTATIVAS - 1) {
         await new Promise(resolve => setTimeout(resolve, ATRASO_ENTRE_TENTATIVAS_MS));
       }
     }
   }
 
+  console.log(`[RETRY] Todas as ${MAX_TENTATIVAS} tentativas falharam após ${Date.now() - inicioTotal}ms`, ultimoErro instanceof Error ? ultimoErro.stack : ultimoErro);
   throw ultimoErro;
 }

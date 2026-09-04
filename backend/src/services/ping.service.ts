@@ -37,6 +37,8 @@ export async function pingTodosServicos(nomes?: string[], force = false): Promis
 }> {
   const alvos = servicosFiltrados(nomes);
   const chave = chaveCache(nomes && alvos.length !== SERVICOS_REGISTRADOS.length ? nomes : undefined);
+  const inicioPing = Date.now();
+  console.log(`[PING] Preparando consulta para: ${alvos.map((s) => s.nome).join(', ')}`);
 
   // Warmup do login (force=true) NUNCA usa cache - tem que bater no Render de verdade
   if (!force) {
@@ -53,10 +55,14 @@ export async function pingTodosServicos(nomes?: string[], force = false): Promis
 
   const servicos = await Promise.all(
     alvos.map(async ({ nome, ping }) => {
+      const inicioServico = Date.now();
+      console.log(`[PING] Iniciando consulta do serviço ${nome}`);
       try {
         const resultado = await ping();
+        console.log(`[PING] Resultado de ${nome} em ${Date.now() - inicioServico}ms`, resultado);
         return { nome, ...resultado };
-      } catch {
+      } catch (erro) {
+        console.log(`[PING] Exceção ao consultar ${nome} após ${Date.now() - inicioServico}ms`, erro instanceof Error ? erro.stack : erro);
         return { nome, acordado: false, mensagem: 'Erro ao pingar servico.' };
       }
     })
@@ -73,6 +79,7 @@ export async function pingTodosServicos(nomes?: string[], force = false): Promis
   // Só cacheia sucesso por 30s; falha fica só 3s para tentar de novo logo
   const ttl = todosProntos ? CACHE_TTL_OK_MS : CACHE_TTL_FAIL_MS;
   cache.set(chave, { servicos, todosProntos, expiraEm: Date.now() + ttl });
+  console.log(`[PING] Fluxo concluído em ${Date.now() - inicioPing}ms; todosProntos=${todosProntos}`);
 
   return { servicos, todosProntos };
 }

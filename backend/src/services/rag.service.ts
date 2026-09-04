@@ -63,9 +63,12 @@ export async function chamarRAGComRetry(pergunta: string, tentativas = 3) {
 }
 
 export async function pingRAG() {
+  const inicioPing = Date.now();
+  console.log(`[RAG] Ping iniciado em ${new Date().toISOString()}`);
   console.log('Ping recebido — chamando RAG');
   try {
     const resposta = await getDocs();
+    console.log(`[RAG] Ping recebeu status=${resposta.status} em ${Date.now() - inicioPing}ms`);
     if (resposta.ok) {
       console.log('RAG está acordado e respondendo!');
       return { acordado: true, mensagem: 'Serviço de IA pronto!' };
