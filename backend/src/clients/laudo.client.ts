@@ -6,10 +6,9 @@ export async function extrairLaudoDoPdf(arquivo: Buffer, nomeArquivo: string) {
   const copia = Uint8Array.from(arquivo);
   form.append('arquivo', new Blob([copia], { type: 'application/pdf' }), nomeArquivo);
 
-  const resposta = await fetch(`${LAUDO_SERVICE_URL}/laudos/extrair`, {
+  const resposta = await fetchComRetry(`${LAUDO_SERVICE_URL}/laudos/extrair`, {
     method: 'POST',
     body: form,
-    signal: AbortSignal.timeout(120_000),
   });
 
   return resposta;
