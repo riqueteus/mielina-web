@@ -19,7 +19,7 @@ export const TENTATIVAS_PERGUNTA = 2;
 export const TENTATIVAS_PING = 6;
 
 export const MENSAGEM_INICIALIZACAO_IA =
-  'Inicializando Inteligência Artificial... Devido ao plano gratuito, a primeira inicialização pode levar até 1 minuto.';
+  'Inicializando Inteligência Artificial...';
 
 export function chaveStoragePorUsuario(userId: string): string {
   return `${STORAGE_KEY}:${userId}`;
